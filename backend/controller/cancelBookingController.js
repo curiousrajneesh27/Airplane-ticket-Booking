@@ -53,7 +53,7 @@ export const cancelBooking = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "Booking cancelled successfully",
+      message: "Booking cancelled Successfully",
     });
   } catch (error) {
     console.error("Error cancelling booking:", error);
