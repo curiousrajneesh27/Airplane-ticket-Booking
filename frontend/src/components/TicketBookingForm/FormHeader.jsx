@@ -41,20 +41,6 @@ const FormHeader = ({ currentActiveForm }) => {
           >
             Review
           </li>
-          <li
-            className={`min-w-[50px] flex justify-center items-center ${
-              currentActiveForm === 2 ? "text-blue-500" : ""
-            }`}
-          >
-            <IoIosArrowForward />
-          </li>
-          <li
-            className={`min-w-[100px] text-xl ${
-              currentActiveForm === 3 ? "text-blue-500" : ""
-            }`}
-          >
-            Payment
-          </li>
         </ul>
       </div>
     </div>

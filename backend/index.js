@@ -6,9 +6,12 @@ import authRoute from "./Routes/auth.js";
 import flightRoute from "./Routes/flights.js";
 import bookingRoute from "./Routes/booking.js";
 import ticketRoute from "./Routes/tickets.js";
+import simpleBookingRoute from "./Routes/simpleBooking.js";
+import adminLegacyRoute from "./Routes/adminLegacy.js";
 import multer from "multer";
-import { createCanvas, loadImage } from "canvas";
-import jsQR from "jsqr"; // Make sure to install jsQR library
+// Temporarily disabled canvas and jsQR for Windows compatibility
+// import { createCanvas, loadImage } from "canvas";
+// import jsQR from "jsqr";
 
 dotenv.config();
 
@@ -39,19 +42,27 @@ const connectDB = async () => {
 
 app.post("/api/v1/decode-qr", upload.single("image"), async (req, res) => {
   try {
-    const imageData = req.file.buffer;
-    const qrData = await decodeQRFromImage(imageData);
-    if (qrData) {
-      res.json({ status: true, data: qrData });
-    } else {
-      res.status(404).json({ status: false, message: "No QR code detected" });
-    }
+    // QR decoding temporarily disabled - requires canvas package with Python
+    res.status(501).json({ 
+      status: false, 
+      message: "QR decoding temporarily disabled. Please use client-side scanning." 
+    });
+    
+    // Original implementation (requires canvas):
+    // const imageData = req.file.buffer;
+    // const qrData = await decodeQRFromImage(imageData);
+    // if (qrData) {
+    //   res.json({ status: true, data: qrData });
+    // } else {
+    //   res.status(404).json({ status: false, message: "No QR code detected" });
+    // }
   } catch (error) {
     console.error("Error decoding QR code:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
 
+/* Commented out - requires canvas package
 async function decodeQRFromImage(imageData) {
   try {
     const image = await loadImage(imageData);
@@ -74,11 +85,14 @@ async function decodeQRFromImage(imageData) {
     throw error;
   }
 }
+*/
 
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/flights", flightRoute);
 app.use("/api/v1/bookings", bookingRoute);
 app.use("/api/v1/tickets", ticketRoute);
+app.use("/api", simpleBookingRoute);
+app.use("/api/admin", adminLegacyRoute); // Admin routes for legacy data management
 
 app.listen(5000, () => {
   connectDB();

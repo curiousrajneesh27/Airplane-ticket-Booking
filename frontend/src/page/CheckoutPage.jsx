@@ -9,13 +9,13 @@ const CheckoutPage = () => {
         <FaCheck className="text-6xl text-green-500 text-center w-full" />
         <div className="text-center">
           <h3 className="md:text-2xl text-base text-gray-900 font-semibold text-center">
-            Payment Done!
+            Booking Confirmed!
           </h3>
           <p className="text-gray-600 my-2">
-            Thankyou for completing your secure online payment. Your payment has
-            been successfully submitted.
+            Thank you for booking with us. Your ticket reservation has been
+            successfully confirmed.
           </p>
-          <p>Have a nice day!</p>
+          <p>Have a nice flight!</p>
           <div className="py-10 text-center">
             <Link
               to={"/"}

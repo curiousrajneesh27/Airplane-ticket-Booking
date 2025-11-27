@@ -81,7 +81,12 @@ const TicketBooking = () => {
       const data = await response.json();
       console.log(data);
 
-      window.location.href = data.session.url;
+      if (data.success) {
+        toast.success("Booking confirmed successfully!");
+        window.location.href = data.redirectUrl;
+      } else {
+        toast.error("Booking failed. Please try again.");
+      }
     } catch (error) {
       console.error("Error:", error);
     }

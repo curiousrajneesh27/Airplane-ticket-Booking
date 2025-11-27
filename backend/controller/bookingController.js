@@ -2,7 +2,6 @@
 import Booking from "../models/bookingSchema.js";
 import User from "../models/userSchema.js";
 import Flight from "../models/flightSchema.js";
-import Stripe from "stripe";
 import Airline from "../models/airlineSchema.js";
 import Ticket from "../models/ticketSchema.js";
 
@@ -22,8 +21,6 @@ export const getCheckoutSession = async (req, res) => {
     if (!flight.bookedSeats) {
       flight.bookedSeats = [];
     }
-
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
     const { bookingUsersData, selectedSeats } = req.body;
 
@@ -67,33 +64,13 @@ export const getCheckoutSession = async (req, res) => {
     flight.bookedSeats.push(...selectedSeats); // Update bookedSeats array
     await flight.save();
 
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      mode: "payment",
-      success_url: `${process.env.CLIENT_SITE_URL}checkout-page`,
-      cancel_url: `${process.env.CLIENT_SITE_URL}`,
-      customer_email: user.email,
-      client_reference_id: req.params.flightId,
-      line_items: [
-        {
-          price_data: {
-            currency: "inr",
-            unit_amount: flight.price * 100,
-            product_data: {
-              name: `${flight.airline.airlineName} - ${flight.from} to ${flight.to}`,
-              description: `Departure: ${flight.departDate} ${flight.departTime}, Arrival: ${flight.arriveDate} ${flight.arriveTime}`,
-              images: [flight.airline.airlineLogo],
-            },
-          },
-          quantity: numPassengers,
-        },
-      ],
-    });
-
+    // Booking completed successfully without payment
     res.status(200).json({
       success: true,
-      message: "Stripe checkout session created",
-      session,
+      message: "Booking completed successfully",
+      bookingId: ticket._id,
+      ticketUID: bookingUID,
+      redirectUrl: `${process.env.CLIENT_SITE_URL}checkout-page`,
     });
   } catch (error) {
     console.error("Error:", error);

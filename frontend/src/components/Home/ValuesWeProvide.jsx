@@ -31,7 +31,7 @@ const ValuesWeProvide = () => {
           <div className="w-[50px] h-[50px] bg-gray-200 rounded-full text-2xl text-gray-500 flex justify-center items-center">
             <IoWalletOutline className=" text-black" />
           </div>
-          <h1 className="text-xl font-bold mt-2">Easy payment</h1>
+          <h1 className="text-xl font-bold mt-2">Easy booking</h1>
           <p className="text-sm text-center mt-1">
             Quick and easy booking of flights for upcoming dates
           </p>
